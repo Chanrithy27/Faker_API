@@ -19,11 +19,13 @@ const createCompany = () => {
     const newCompany = {
         _id: faker.database.mongodbObjectId(),
         name: faker.company.name(),
-        address: faker.location.streetAddress(),
-        city: faker.location.city(),
-        state: faker.location.state(),
-        zipCode: faker.location.zipCode(),
-        country: faker.location.country(),
+        address: {
+            street: faker.location.streetAddress(),
+            city: faker.location.city(),
+            state: faker.location.state(),
+            zipCode: faker.location.zipCode(),
+            country: faker.location.country(),
+        },
 
     };
     return newCompany;
@@ -35,15 +37,23 @@ console.log(newFakeUser);
 const newFakeCompany = createCompany();
 console.log(newFakeCompany);
 
-app.use( express.json() );
-app.use( express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.get("/api/users/new", (req, res) => {
-    res.json( newFakeUser );
+app.get("/api/user/new", (req, res) => {
+    res.json(newFakeUser);
 });
 
 app.get("/api/company/new", (req, res) => {
-    res.json( newFakeCompany );
+    res.json(newFakeCompany);
+});
+
+app.get("/api/user/company", (req, res) => {
+    const userCompany = {
+        user: newFakeUser,
+        company: newFakeCompany,
+    };
+    res.json(userCompany)
 });
 
 // app.post('/api/users/new', (req, res) => {
@@ -51,4 +61,4 @@ app.get("/api/company/new", (req, res) => {
 //     res.json( {status: "ok"});
 // });
 
-app.listen( port, () => console.log("Listening on port: ${port}"));
+app.listen(port, () => console.log("Listening on port: ${port}"));
